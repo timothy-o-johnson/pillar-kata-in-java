@@ -44,9 +44,9 @@ public class CheckoutOrderApp {
         Double itemCount = basket.get(itemName);
 
         if(basket.containsKey(itemName)){
-            basket.replace(itemName, itemCount,  itemCount++);
+            this.basket.replace(itemName, itemCount + 1);
         } else {
-            basket.put(itemName, 1.0);
+            this.basket.put(itemName, 1.0);
         }
     }
 
