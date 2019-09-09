@@ -138,4 +138,21 @@ public class CheckoutOrderAppTest {
 
         assertEquals(totalPrice, checkout.getTotalPrice());
     }
+
+    @org.junit.Test
+    public void whenAddingMarkDownsShouldSaveMarkDownsToMarkdownObject(){
+        Markdown soup = new Markdown("soup", 1.5);
+        Markdown bananas = new Markdown("bananas", 0.1);
+
+        Markdown[] markdowns = {soup, bananas};
+        HashMap<String, Double> markdownObj = new HashMap();
+
+        markdownObj.put("soup", 1.5);
+        markdownObj.put("bananas", 0.1);
+
+        checkout.addMarkdowns(markdowns);
+
+        assertEquals(markdownObj.toString(), checkout.markDowns.toString());
+
+    }
 }

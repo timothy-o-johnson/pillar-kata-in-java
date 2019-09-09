@@ -1,8 +1,8 @@
 package com.company;
 
 public class Markdown {
-    private String name;
-    private Double amount;
+    protected String name;
+    protected Double amount;
 
     public Markdown(String name, Double amount) {
         this.name = name;
