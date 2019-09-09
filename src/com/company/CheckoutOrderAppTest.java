@@ -8,6 +8,28 @@ public class CheckoutOrderAppTest {
 
     CheckoutOrderApp checkout;
 
+    // scans
+    Scan soup = new Scan("soup");
+    Scan sardines = new Scan("sardines");
+    Scan cards = new Scan("cards");
+    Scan groundBeef = new Scan("ground beef", 5.0);
+    Scan bananas = new Scan("bananas", 5.0);
+
+
+    // create items []
+    Item soupItem = new Item("soup", 1.89);
+    Item sardinesItem = new Item("sardines", 0.89);
+    Item cardsItem = new Item("cards", 4.0);
+    Item batteriesItem = new Item("batteries", 10.0);
+    Item lightbulbsItem = new Item("lightbulbs", 2.);
+    Item orangeJuiceItem = new Item("orange juice", 5.);
+    Item groundBeefItem = new Item("ground beef", 2.5, true);
+    Item bananasItem = new Item("bananas", 1.00, true);
+
+    // create markdowns
+    Markdown soupMarkdown = new Markdown("soup", 1.5);
+    Markdown bananasMarkdown = new Markdown("bananas", 0.1);
+
     @org.junit.BeforeClass
     public static void beforeClass(){
         System.out.println("This loads before any tests are called.");
@@ -17,26 +39,12 @@ public class CheckoutOrderAppTest {
     public void setup(){
         checkout = new CheckoutOrderApp();
 
-        Item soup = new Item("soup", 1.89);
-        Item sardines = new Item("sardines", 0.89);
-        Item cards = new Item("cards", 4.0);
-        Item batteries = new Item("batteries", 10.0);
-        Item lightbulbs = new Item("lightbulbs", 2.);
-        Item orangeJuice = new Item("orange juice", 5.);
-        Item groundBeef = new Item("ground beef", 2.5, true);
-        Item bananas = new Item("bananas", 1.00, true);
-
-        Item[] items = {soup, sardines, cards, batteries, lightbulbs, orangeJuice, groundBeef, bananas};
         // add items to itemList
+        Item[] items = {soupItem, sardinesItem, cardsItem, batteriesItem, lightbulbsItem, orangeJuiceItem, groundBeefItem, bananasItem};
         checkout.addItemsToGlobalItemListObjectAndReturnGlobalItemListObject(items);
 
-       // create markdowns
-        Markdown soupMarkdown = new Markdown("soup", 1.5);
-        Markdown bananasMarkdown = new Markdown("bananas", 0.1);
-
-        Markdown[] markdowns = {soupMarkdown, bananasMarkdown};
-
         // add markdowns
+        Markdown[] markdowns = {soupMarkdown, bananasMarkdown};
         checkout.addMarkdowns(markdowns);
     }
 
@@ -85,13 +93,9 @@ public class CheckoutOrderAppTest {
     @org.junit.Test
     public void shouldReturnAnObjectOfScannedObjectsWhenSeveralOfTheSameItemsAreScanned(){
 
-        Scan soup = new Scan("soup");
-        Scan sardines = new Scan("sardines");
-        Scan cards = new Scan("cards");
         Scan[] scans = {soup, sardines, soup, cards};
 
         HashMap<String, Double> basket = new HashMap();
-
         basket.put("soup", 2.0);
         basket.put("sardines", 1.0);
         basket.put("cards", 1.0);
@@ -106,14 +110,10 @@ public class CheckoutOrderAppTest {
 
     @org.junit.Test
     public void shouldReturnAnObjectOfScannedObjectsWhenWeightedItemsAreScanned(){
-        Scan soup = new Scan("soup");
-        Scan sardines = new Scan("sardines");
-        Scan cards = new Scan("cards");
-        Scan groundBeef = new Scan("ground beef", 5.0);
+
         Scan[] scans = {soup, sardines, soup, cards, groundBeef};
 
         HashMap<String, Double> basket = new HashMap();
-
         basket.put("soup", 2.0);
         basket.put("sardines", 1.0);
         basket.put("cards", 1.0);
@@ -131,10 +131,6 @@ public class CheckoutOrderAppTest {
     public void totalShouldReflectAnIncreaseByThePerUnitPriceAfterAScan(){
         Double totalPrice = 0.0;
 
-        Scan soup = new Scan("soup");
-        Scan sardines = new Scan("sardines");
-        Scan cards = new Scan("cards");
-        Scan groundBeef = new Scan("ground beef", 5.0);
         Scan[] scans = {soup, sardines, soup, cards, groundBeef};
 
         HashMap<String, Double> basket = new HashMap();
@@ -154,7 +150,6 @@ public class CheckoutOrderAppTest {
     @org.junit.Test
     public void whenAddingMarkDownsShouldSaveMarkDownsToMarkdownObject(){
         HashMap<String, Double> markdownObj = new HashMap();
-
         markdownObj.put("soup", 1.5);
         markdownObj.put("bananas", 0.1);
 
@@ -163,15 +158,10 @@ public class CheckoutOrderAppTest {
 
     @org.junit.Test
     public void whenScanningAPerUnitItemTotalPriceShouldReflectThePerUnitCostLessTheMarkdown(){
-        HashMap<String, Double> markdownObj = new HashMap();
-        markdownObj.put("soup", 1.5);
-        markdownObj.put("bananas", 0.1);
+        Double totalPrice = (checkout.itemList.get("soup") - 1.5) * 2;
 
-        Scan soup = new Scan("soup");
         Scan[] scans = {soup, soup};
         checkout.scanItemsAddToGlobalBasketAndReturnGlobalTotalPrice(scans);
-
-        Double totalPrice = (checkout.itemList.get("soup") - 1.5) * 2;
 
         assertEquals(totalPrice, checkout.getTotalPrice());
     }
@@ -179,13 +169,7 @@ public class CheckoutOrderAppTest {
     @org.junit.Test
     public void whenScanningAByWeightItemTotalPriceShouldReflectTheByWeightCostLessTheMarkdown(){
         Double totalPrice = 0.0;
-
-        HashMap<String, Double> markdownObj = new HashMap();
-        markdownObj.put("soup", 1.5);
-        markdownObj.put("bananas", 0.1);
-
-        Scan soup = new Scan("soup");
-        Scan bananas = new Scan("bananas", 5.0);
+        
         Scan[] scans = {soup, soup, bananas};
         checkout.scanItemsAddToGlobalBasketAndReturnGlobalTotalPrice(scans);
 
