@@ -169,7 +169,7 @@ public class CheckoutOrderAppTest {
     @org.junit.Test
     public void whenScanningAByWeightItemTotalPriceShouldReflectTheByWeightCostLessTheMarkdown(){
         Double totalPrice = 0.0;
-        
+
         Scan[] scans = {soup, soup, bananas};
         checkout.scanItemsAddToGlobalBasketAndReturnGlobalTotalPrice(scans);
 
@@ -177,5 +177,17 @@ public class CheckoutOrderAppTest {
         totalPrice += (checkout.itemList.get("bananas") - 0.1) * 5;
 
         assertEquals(totalPrice, checkout.getTotalPrice());
+    }
+
+    @org.junit.Test
+    public void whenABuyNItemsGetMItemsAtXPercentOffSpecialIsCreatedShouldSaveToSpecialsObj(){
+       Special sardinesSpecial = new Special("xOff", "sardines", 1.0, 1.0, 1.0, 1.0);
+       Special[] specials = {sardinesSpecial};
+       checkout.addSpecials(specials);
+
+        HashMap<String, Special> specialsObj = new HashMap();
+        specialsObj.put("sardines", sardinesSpecial);
+
+        assertEquals(specialsObj.toString(), checkout.specials.toString());
     }
 }

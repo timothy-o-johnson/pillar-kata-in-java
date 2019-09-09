@@ -8,7 +8,7 @@ public class CheckoutOrderApp {
     protected HashMap<String, Double> itemList = new HashMap();
     protected HashMap<String, Double>  basket = new HashMap();
     protected HashMap<String, Double> markdowns = new HashMap();
-    protected HashMap<Special, Integer> specials = new HashMap();
+    protected HashMap<String, Special> specials = new HashMap();
     private Double totalPrice = 0.0;
 
     public HashMap addItemsToGlobalItemListObjectAndReturnGlobalItemListObject(Item[] items){
@@ -80,6 +80,14 @@ public class CheckoutOrderApp {
         }
 
         return this.markdowns;
+    }
+
+    public HashMap addSpecials(Special[] specials){
+        for(Special special: specials){
+            this.specials.put(special.name, special);
+        }
+
+        return this.specials;
     }
 
 }
