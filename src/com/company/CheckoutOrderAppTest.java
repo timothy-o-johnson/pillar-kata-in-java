@@ -27,10 +27,17 @@ public class CheckoutOrderAppTest {
         Item bananas = new Item("bananas", 1.00, true);
 
         Item[] items = {soup, sardines, cards, batteries, lightbulbs, orangeJuice, groundBeef, bananas};
-
-        checkout.addItemsToGlobalItemListObjectAndReturnGlobalItemListObject(items);
         // add items to itemList
-       // checkout.
+        checkout.addItemsToGlobalItemListObjectAndReturnGlobalItemListObject(items);
+
+       // create markdowns
+        Markdown soupMarkdown = new Markdown("soup", 1.5);
+        Markdown bananasMarkdown = new Markdown("bananas", 0.1);
+
+        Markdown[] markdowns = {soupMarkdown, bananasMarkdown};
+
+        // add markdowns
+        checkout.addMarkdowns(markdowns);
     }
 
     @org.junit.Test
@@ -45,7 +52,7 @@ public class CheckoutOrderAppTest {
         itemList.put("lightbulbs", 2.0);
         itemList.put("orange juice", 5.0);
         itemList.put("ground beef", 2.5);
-        itemList.put("bananas", 0.25);
+        itemList.put("bananas", 1.00);
 
         System.out.println(checkout.itemList.toString());
         System.out.println(itemList.toString());
@@ -122,6 +129,8 @@ public class CheckoutOrderAppTest {
 
     @org.junit.Test
     public void totalShouldReflectAnIncreaseByThePerUnitPriceAfterAScan(){
+        Double totalPrice = 0.0;
+
         Scan soup = new Scan("soup");
         Scan sardines = new Scan("sardines");
         Scan cards = new Scan("cards");
@@ -130,7 +139,10 @@ public class CheckoutOrderAppTest {
 
         HashMap<String, Double> basket = new HashMap();
 
-        Double totalPrice = checkout.itemList.get("soup") * 2 + checkout.itemList.get("sardines") * 1 + checkout.itemList.get("cards") * 1 + checkout.itemList.get("ground beef") * 5;
+        totalPrice += (checkout.itemList.get("soup") - checkout.markdowns.get("soup"))* 2;
+        totalPrice += checkout.itemList.get("sardines") * 1;
+        totalPrice += checkout.itemList.get("cards") * 1;
+        totalPrice += checkout.itemList.get("ground beef") * 5;
 
         System.out.println(totalPrice);
 
@@ -141,37 +153,22 @@ public class CheckoutOrderAppTest {
 
     @org.junit.Test
     public void whenAddingMarkDownsShouldSaveMarkDownsToMarkdownObject(){
-        Markdown soup = new Markdown("soup", 1.5);
-        Markdown bananas = new Markdown("bananas", 0.1);
-
-        Markdown[] markdowns = {soup, bananas};
         HashMap<String, Double> markdownObj = new HashMap();
 
         markdownObj.put("soup", 1.5);
         markdownObj.put("bananas", 0.1);
-
-        checkout.addMarkdowns(markdowns);
 
         assertEquals(markdownObj.toString(), checkout.markdowns.toString());
     }
 
     @org.junit.Test
     public void whenScanningAPerUnitItemTotalPriceShouldReflectThePerUnitCostLessTheMarkdown(){
-        Markdown soupMarkdown = new Markdown("soup", 1.5);
-        Markdown bananasMarkdown = new Markdown("bananas", 0.1);
-
-        Markdown[] markdowns = {soupMarkdown, bananasMarkdown};
         HashMap<String, Double> markdownObj = new HashMap();
-
         markdownObj.put("soup", 1.5);
         markdownObj.put("bananas", 0.1);
 
-        checkout.addMarkdowns(markdowns);
-
         Scan soup = new Scan("soup");
-
         Scan[] scans = {soup, soup};
-
         checkout.scanItemsAddToGlobalBasketAndReturnGlobalTotalPrice(scans);
 
         Double totalPrice = (checkout.itemList.get("soup") - 1.5) * 2;
@@ -183,22 +180,13 @@ public class CheckoutOrderAppTest {
     public void whenScanningAByWeightItemTotalPriceShouldReflectTheByWeightCostLessTheMarkdown(){
         Double totalPrice = 0.0;
 
-        Markdown soupMarkdown = new Markdown("soup", 1.5);
-        Markdown bananasMarkdown = new Markdown("bananas", 0.1);
-
-        Markdown[] markdowns = {soupMarkdown, bananasMarkdown};
         HashMap<String, Double> markdownObj = new HashMap();
-
         markdownObj.put("soup", 1.5);
         markdownObj.put("bananas", 0.1);
 
-        checkout.addMarkdowns(markdowns);
-
         Scan soup = new Scan("soup");
         Scan bananas = new Scan("bananas", 5.0);
-
         Scan[] scans = {soup, soup, bananas};
-
         checkout.scanItemsAddToGlobalBasketAndReturnGlobalTotalPrice(scans);
 
         totalPrice += (checkout.itemList.get("soup") - 1.5) * 2;

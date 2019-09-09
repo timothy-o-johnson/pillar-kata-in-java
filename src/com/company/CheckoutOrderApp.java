@@ -65,7 +65,7 @@ public class CheckoutOrderApp {
         for(String item : basketItems){
             quantity = basket.get(item);
             price = itemList.get(item);
-            markdown = markdowns.get(item);
+            markdown = markdowns.containsKey(item) ? markdowns.get(item) : 0.0 ;
 
             totalPrice += (price - markdown) * quantity;
 
