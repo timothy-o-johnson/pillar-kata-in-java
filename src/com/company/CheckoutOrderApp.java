@@ -1,6 +1,8 @@
 package com.company;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class CheckoutOrderApp {
     protected HashMap<String, Double> itemList = new HashMap();
@@ -51,6 +53,22 @@ public class CheckoutOrderApp {
     }
 
     public Double getTotalPrice(){
+        Double quantity;
+        Double price;
+        totalPrice = 0.0;
+
+        // get array of basket keys
+        ArrayList<String> basketItems =  new ArrayList<String>(this.basket.keySet());
+
+        // loop through keys
+        for(String item : basketItems){
+            quantity = basket.get(item);
+            price = itemList.get(item);
+
+            totalPrice += quantity * price;
+
+        }
+        // for each key multiply the basket quantity by the item cost
         return totalPrice;
     }
 
