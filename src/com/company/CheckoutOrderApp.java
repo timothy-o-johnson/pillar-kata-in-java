@@ -33,7 +33,7 @@ public class CheckoutOrderApp {
     private void loadItemIntoBasket(String itemName, Double itemWeight) {
         if(basket.containsKey(itemName)){
             // add item weight to pre-existing item weight
-            basket.replace(itemName, basket.get(itemName),  basket.get(itemName) + itemWeight);
+            basket.replace(itemName, basket.get(itemName) + itemWeight);
         } else {
             // add to basket
             basket.put(itemName, itemWeight);

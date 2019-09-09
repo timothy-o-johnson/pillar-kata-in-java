@@ -55,7 +55,7 @@ public class CheckoutOrderAppTest {
 
 
     @org.junit.Test
-    public void shouldReturnAnObjectOfScannedObjectWhenItemsAreScanned(){
+    public void shouldReturnAnObjectOfScannedObjectsWhenItemsAreScanned(){
 
         Scan soup = new Scan("soup");
         Scan sardines = new Scan("sardines");
@@ -89,6 +89,29 @@ public class CheckoutOrderAppTest {
         basket.put("soup", 2.0);
         basket.put("sardines", 1.0);
         basket.put("cards", 1.0);
+
+        checkout.scanItemsAddToGlobalBasketAndReturnGlobalTotalPrice(scans);
+
+        System.out.println(checkout.basket.toString());
+        System.out.println(basket.toString());
+
+        assertEquals(basket, checkout.basket);
+    }
+
+    @org.junit.Test
+    public void shouldReturnAnObjectOfScannedObjectsWhenWeightedItemsAreScanned(){
+        Scan soup = new Scan("soup");
+        Scan sardines = new Scan("sardines");
+        Scan cards = new Scan("cards");
+        Scan groundBeef = new Scan("ground beef", 5.0);
+        Scan[] scans = {soup, sardines, soup, cards, groundBeef};
+
+        HashMap<String, Double> basket = new HashMap();
+
+        basket.put("soup", 2.0);
+        basket.put("sardines", 1.0);
+        basket.put("cards", 1.0);
+        basket.put("ground beef", 5.0);
 
         checkout.scanItemsAddToGlobalBasketAndReturnGlobalTotalPrice(scans);
 
