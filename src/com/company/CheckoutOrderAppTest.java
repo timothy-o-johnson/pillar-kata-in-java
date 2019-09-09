@@ -152,7 +152,30 @@ public class CheckoutOrderAppTest {
 
         checkout.addMarkdowns(markdowns);
 
-        assertEquals(markdownObj.toString(), checkout.markDowns.toString());
+        assertEquals(markdownObj.toString(), checkout.markdowns.toString());
+    }
 
+    @org.junit.Test
+    public void whenScanningAPerUnitItemTotalPriceShouldReflectThePerUnitCostLessTheMarkdown(){
+        Markdown soupMarkdown = new Markdown("soup", 1.5);
+        Markdown bananasMarkdown = new Markdown("bananas", 0.1);
+
+        Markdown[] markdowns = {soupMarkdown, bananasMarkdown};
+        HashMap<String, Double> markdownObj = new HashMap();
+
+        markdownObj.put("soup", 1.5);
+        markdownObj.put("bananas", 0.1);
+
+        checkout.addMarkdowns(markdowns);
+
+        Scan soup = new Scan("soup");
+
+        Scan[] scans = {soup, soup};
+
+        checkout.scanItemsAddToGlobalBasketAndReturnGlobalTotalPrice(scans);
+
+        Double totalPrice = (checkout.itemList.get("soup") - 1.5) * 2;
+
+        assertEquals(totalPrice, checkout.getTotalPrice());
     }
 }

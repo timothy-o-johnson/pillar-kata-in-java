@@ -7,7 +7,7 @@ import java.util.List;
 public class CheckoutOrderApp {
     protected HashMap<String, Double> itemList = new HashMap();
     protected HashMap<String, Double>  basket = new HashMap();
-    protected HashMap<String, Double> markDowns = new HashMap();
+    protected HashMap<String, Double> markdowns = new HashMap();
     protected HashMap<Special, Integer> specials = new HashMap();
     private Double totalPrice = 0.0;
 
@@ -55,6 +55,7 @@ public class CheckoutOrderApp {
     public Double getTotalPrice(){
         Double quantity;
         Double price;
+        Double markdown = 0.0;
         totalPrice = 0.0;
 
         // get array of basket keys
@@ -64,8 +65,9 @@ public class CheckoutOrderApp {
         for(String item : basketItems){
             quantity = basket.get(item);
             price = itemList.get(item);
+            markdown = markdowns.get(item);
 
-            totalPrice += quantity * price;
+            totalPrice += (price - markdown) * quantity;
 
         }
         // for each key multiply the basket quantity by the item cost
@@ -74,10 +76,10 @@ public class CheckoutOrderApp {
 
     public HashMap addMarkdowns(Markdown[] markdowns){
         for(Markdown markdown: markdowns){
-            this.markDowns.put(markdown.name, markdown.amount);
+            this.markdowns.put(markdown.name, markdown.amount);
         }
 
-        return this.markDowns;
+        return this.markdowns;
     }
 
 }
