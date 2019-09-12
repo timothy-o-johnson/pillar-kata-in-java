@@ -4,7 +4,7 @@ public class Special {
     protected String type;
     protected String name;
     protected Double buyQuantity;
-    protected Double getBuyQuantity;
+    protected Double getQuantity;
     protected Double getDiscount;
     protected Double limit;
 
@@ -12,7 +12,7 @@ public class Special {
         this.type = type;
         this.name = name;
         this.buyQuantity = buyQuantity;
-        this.getBuyQuantity = getBuyQuantity;
+        this.getQuantity = getBuyQuantity;
         this.getDiscount = getDiscount;
         this.limit = limit;
     }

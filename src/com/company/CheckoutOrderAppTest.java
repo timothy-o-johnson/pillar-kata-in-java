@@ -15,7 +15,6 @@ public class CheckoutOrderAppTest {
     Scan groundBeef = new Scan("ground beef", 5.0);
     Scan bananas = new Scan("bananas", 5.0);
 
-
     // create items []
     Item soupItem = new Item("soup", 1.89);
     Item sardinesItem = new Item("sardines", 0.89);
@@ -189,5 +188,21 @@ public class CheckoutOrderAppTest {
         specialsObj.put("sardines", sardinesSpecial);
 
         assertEquals(specialsObj.toString(), checkout.specials.toString());
+    }
+
+    @org.junit.Test
+    public void whenABuyNItemsGetMItemsAtXPercentOffSpecialIsCreatedShouldApplySpecialToTotalPrice(){
+        Double totalPrice = 0.0;
+
+        Special sardinesSpecial = new Special("xOff", "sardines", 1.0, 1.0, 1.0, 1.0);
+        Special[] specials = {sardinesSpecial};
+        checkout.addSpecials(specials);
+
+       Scan[] scans = {sardines, sardines, sardines};
+
+       checkout.scanItemsAddToGlobalBasketAndReturnGlobalTotalPrice(scans);
+       totalPrice = (checkout.itemList.get("sardines") * 3 - checkout.itemList.get("sardines")) * 100/ 100;
+       totalPrice = Math.round (totalPrice * 100.0 ) / 100.0;
+       assertEquals(totalPrice, checkout.getTotalPrice());
     }
 }
