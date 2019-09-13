@@ -29,8 +29,9 @@ public class CheckoutOrderAppTest {
     Markdown soupMarkdown = new Markdown("soup", 1.5);
     Markdown bananasMarkdown = new Markdown("bananas", 0.1);
 
-    // create s[ecoa;s
+    // create specials
     Special sardinesSpecial = new Special("xOff", "sardines", 1.0, 1.0, 1.0, 1.0);
+    Special cardsSpecial = new Special("xOff", "cards", 2.0, 1.0, 0.5, 2.0);
 
 
     @org.junit.BeforeClass
@@ -51,7 +52,7 @@ public class CheckoutOrderAppTest {
         checkout.addMarkdowns(markdowns);
 
         // add specials
-        Special[] specials = {sardinesSpecial};
+        Special[] specials = {sardinesSpecial, cardsSpecial};
         checkout.addSpecials(specials);
     }
 
@@ -176,6 +177,7 @@ public class CheckoutOrderAppTest {
     public void whenABuyNItemsGetMItemsAtXPercentOffSpecialIsCreatedShouldSaveToSpecialsObj(){
         HashMap<String, Special> specialsObj = new HashMap();
         specialsObj.put("sardines", sardinesSpecial);
+        specialsObj.put("cards", cardsSpecial);
 
         assertEquals(specialsObj.toString(), checkout.specials.toString());
     }
@@ -191,5 +193,20 @@ public class CheckoutOrderAppTest {
        totalPrice = Math.round (totalPrice * 100.0 ) / 100.0;
 
        assertEquals(totalPrice, checkout.getTotalPrice());
+    }
+
+    @org.junit.Test
+    public void whenABuy2ItemsGet1ItemAt50PercentOffSpecialIsCreatedShouldCorrectlyUpdateTotalPrice(){
+        Double totalPrice = 0.0;
+        Double regularCardPrice = checkout.itemList.get("cards");
+        Double discount = 0.5;
+
+        Scan[] scans = {cards, cards, cards, cards};
+
+        checkout.scanItemsAddToGlobalBasketAndReturnGlobalTotalPrice(scans);
+        totalPrice = regularCardPrice * 3 + (1 * discount * regularCardPrice);
+        totalPrice = Math.round (totalPrice * 100.0 ) / 100.0;
+
+        assertEquals(totalPrice, checkout.getTotalPrice());
     }
 }
