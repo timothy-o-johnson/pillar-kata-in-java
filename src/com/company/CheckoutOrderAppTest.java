@@ -56,7 +56,7 @@ public class CheckoutOrderAppTest {
     }
 
     @org.junit.Test
-    public void shouldReturnAnObjectOfItemsAfterItemsHaveBeenEntered(){
+    public void whenItemsHaveBeenEnteredShouldReturnAnObjectOfItems(){
 
         HashMap<String, Double> itemList = new HashMap();
 
@@ -69,14 +69,11 @@ public class CheckoutOrderAppTest {
         itemList.put("ground beef", 2.5);
         itemList.put("bananas", 1.00);
 
-        System.out.println(checkout.itemList.toString());
-        System.out.println(itemList.toString());
-
         assertEquals(itemList,checkout.itemList);
     }
 
     @org.junit.Test
-    public void shouldReturnAnObjectOfScannedObjectsWhenItemsAreScanned(){
+    public void whenItemsAreScannedShouldReturnAnObjectOfScannedObjects(){
 
         Scan soup = new Scan("soup");
         Scan sardines = new Scan("sardines");
@@ -91,14 +88,11 @@ public class CheckoutOrderAppTest {
 
         checkout.scanItemsAddToGlobalBasketAndReturnGlobalTotalPrice(scans);
 
-        System.out.println(checkout.basket.toString());
-        System.out.println(basket.toString());
-
         assertEquals(basket, checkout.basket);
     }
 
     @org.junit.Test
-    public void shouldReturnAnObjectOfScannedObjectsWhenSeveralOfTheSameItemsAreScanned(){
+    public void whenSeveralOfTheSameItemsAreScannedShouldReturnAnObjectOfScannedObjects(){
 
         Scan[] scans = {soup, sardines, soup, cards};
 
@@ -109,14 +103,11 @@ public class CheckoutOrderAppTest {
 
         checkout.scanItemsAddToGlobalBasketAndReturnGlobalTotalPrice(scans);
 
-        System.out.println(checkout.basket.toString());
-        System.out.println(basket.toString());
-
         assertEquals(basket, checkout.basket);
     }
 
     @org.junit.Test
-    public void shouldReturnAnObjectOfScannedObjectsWhenWeightedItemsAreScanned(){
+    public void whenWeightedItemsAreScannedShouldReturnAnObjectOfScannedObjects(){
 
         Scan[] scans = {soup, sardines, soup, cards, groundBeef};
 
@@ -128,14 +119,11 @@ public class CheckoutOrderAppTest {
 
         checkout.scanItemsAddToGlobalBasketAndReturnGlobalTotalPrice(scans);
 
-        System.out.println(checkout.basket.toString());
-        System.out.println(basket.toString());
-
         assertEquals(basket, checkout.basket);
     }
 
     @org.junit.Test
-    public void totalShouldReflectAnIncreaseByThePerUnitPriceAfterAScan(){
+    public void whenScannedTotalShouldReflectAnIncreaseByThePerUnitPrice(){
         Double totalPrice = 0.0;
 
         Scan[] scans = {soup, sardines, soup, cards, groundBeef};
@@ -146,8 +134,6 @@ public class CheckoutOrderAppTest {
         totalPrice += checkout.itemList.get("sardines") * 1;
         totalPrice += checkout.itemList.get("cards") * 1;
         totalPrice += checkout.itemList.get("ground beef") * 5;
-
-        System.out.println(totalPrice);
 
         checkout.scanItemsAddToGlobalBasketAndReturnGlobalTotalPrice(scans);
 
@@ -196,13 +182,14 @@ public class CheckoutOrderAppTest {
 
     @org.junit.Test
     public void whenABuyNItemsGetMItemsAtXPercentOffSpecialIsCreatedShouldApplySpecialToTotalPrice(){
-        Double totalPrice = 0.0;
+       Double totalPrice = 0.0;
 
        Scan[] scans = {sardines, sardines, sardines};
 
        checkout.scanItemsAddToGlobalBasketAndReturnGlobalTotalPrice(scans);
        totalPrice = (checkout.itemList.get("sardines") * 3 - checkout.itemList.get("sardines")) * 100/ 100;
        totalPrice = Math.round (totalPrice * 100.0 ) / 100.0;
+
        assertEquals(totalPrice, checkout.getTotalPrice());
     }
 }
