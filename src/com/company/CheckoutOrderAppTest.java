@@ -33,6 +33,7 @@ public class CheckoutOrderAppTest {
     Special sardinesSpecial = new Special("xOff", "sardines", 1.0, 1.0, 1.0, 1.0);
     Special cardsSpecial = new Special("xOff", "cards", 2.0, 1.0, 0.5, 2.0);
 
+    Special batteriesSpecial = new Special ("nForX","batteries",  3.0,  5.0 );
 
     @org.junit.BeforeClass
     public static void beforeClass(){
@@ -52,7 +53,7 @@ public class CheckoutOrderAppTest {
         checkout.addMarkdowns(markdowns);
 
         // add specials
-        Special[] specials = {sardinesSpecial, cardsSpecial};
+        Special[] specials = {sardinesSpecial, cardsSpecial, batteriesSpecial};
         checkout.addSpecials(specials);
     }
 
@@ -178,6 +179,7 @@ public class CheckoutOrderAppTest {
         HashMap<String, Special> specialsObj = new HashMap();
         specialsObj.put("sardines", sardinesSpecial);
         specialsObj.put("cards", cardsSpecial);
+        specialsObj.put("batteries", batteriesSpecial);
 
         assertEquals(specialsObj.toString(), checkout.specials.toString());
     }
@@ -208,5 +210,15 @@ public class CheckoutOrderAppTest {
         totalPrice = Math.round (totalPrice * 100.0 ) / 100.0;
 
         assertEquals(totalPrice, checkout.getTotalPrice());
+    }
+
+    @org.junit.Test
+    public void whenNForXSpecialIsCreatedShouldSaveToSpecialsObj(){
+        HashMap<String, Special> specialsObj = new HashMap();
+        specialsObj.put("sardines", sardinesSpecial);
+        specialsObj.put("cards", cardsSpecial);
+        specialsObj.put("batteries", batteriesSpecial);
+
+        assertEquals(specialsObj.toString(), checkout.specials.toString());
     }
 }
