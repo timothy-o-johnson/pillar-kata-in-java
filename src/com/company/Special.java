@@ -17,13 +17,14 @@ public class Special {
         this.getDiscount = getDiscount;
         this.limit = limit;
     }
-    public Special(String type, String name, Double buyQuantity, Double salesPrice) {
+
+    public Special(String type, String name, Double buyQuantity, Double salesPrice, Double limit) {
         this.type = type;
         this.name = name;
         this.buyQuantity = buyQuantity;
         this.getQuantity = null;
         this.getDiscount = 0.0;
-        this.limit = Double.MAX_VALUE;
+        this.limit = limit;
         this.salesPrice = salesPrice;
     }
 }

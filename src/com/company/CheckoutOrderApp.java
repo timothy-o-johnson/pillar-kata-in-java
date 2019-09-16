@@ -153,8 +153,8 @@ public class CheckoutOrderApp {
 
         Double basketQuantityTemp = basketQuantity;
         Double buyQuantity = special.buyQuantity;
-        Double discount = special.salesPrice;
-        Double limit = special.limit;
+        double discount = special.salesPrice;
+        double limit = special.limit;
         Double discountedQuantity = 0.0;
 
         while (basketQuantityTemp >= buyQuantity) {

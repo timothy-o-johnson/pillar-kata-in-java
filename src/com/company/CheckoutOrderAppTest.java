@@ -15,6 +15,7 @@ public class CheckoutOrderAppTest {
     Scan groundBeef = new Scan("ground beef", 5.0);
     Scan bananas = new Scan("bananas", 5.0);
     Scan batteries = new Scan("batteries");
+    Scan orangeJuice = new Scan("orange juice");
 
     // create items []
     Item soupItem = new Item("soup", 1.89);
@@ -34,7 +35,9 @@ public class CheckoutOrderAppTest {
     Special sardinesSpecial = new Special("xOff", "sardines", 1.0, 1.0, 1.0, 1.0);
     Special cardsSpecial = new Special("xOff", "cards", 2.0, 1.0, 0.5, 2.0);
 
-    Special batteriesSpecial = new Special ("nForX","batteries",  3.0,  5.0 );
+
+    Special batteriesSpecial = new Special ("nForX","batteries",  3.0,  5.0, 1000.0 );
+    Special orangeJuiceSpecial = new Special ("nForX","orange juice",  4.0,  10.0, 12.0 );
 
     @org.junit.BeforeClass
     public static void beforeClass(){
@@ -54,7 +57,7 @@ public class CheckoutOrderAppTest {
         checkout.addMarkdowns(markdowns);
 
         // add specials
-        Special[] specials = {sardinesSpecial, cardsSpecial, batteriesSpecial};
+        Special[] specials = {sardinesSpecial, cardsSpecial, batteriesSpecial, orangeJuiceSpecial};
         checkout.addSpecials(specials);
     }
 
@@ -181,6 +184,7 @@ public class CheckoutOrderAppTest {
         specialsObj.put("sardines", sardinesSpecial);
         specialsObj.put("cards", cardsSpecial);
         specialsObj.put("batteries", batteriesSpecial);
+        specialsObj.put("orange juice", orangeJuiceSpecial);
 
         assertEquals(specialsObj.toString(), checkout.specials.toString());
     }
@@ -219,6 +223,7 @@ public class CheckoutOrderAppTest {
         specialsObj.put("sardines", sardinesSpecial);
         specialsObj.put("cards", cardsSpecial);
         specialsObj.put("batteries", batteriesSpecial);
+        specialsObj.put("orange juice", orangeJuiceSpecial);
 
         assertEquals(specialsObj.toString(), checkout.specials.toString());
     }
@@ -233,6 +238,26 @@ public class CheckoutOrderAppTest {
 
         checkout.scanItemsAddToGlobalBasketAndReturnGlobalTotalPrice(scans);
         totalPrice = regularCardPrice * 2 + (1 * discountPrice);
+        totalPrice = Math.round (totalPrice * 100.0 ) / 100.0;
+
+        assertEquals(totalPrice, checkout.getTotalPrice());
+    }
+
+
+    @org.junit.Test
+    public void whenAddingBuy4Get10Limit12SpecialShouldUpdateTotalPrice(){
+        Double totalPrice = 0.0;
+        Double regularOrangeJuicePrice = checkout.itemList.get("orange juice");
+
+        Scan[] scans = new Scan[20];
+
+        for(int i = 0; i < 20; i++ ){
+            scans[i] = orangeJuice;
+        }
+
+
+        checkout.scanItemsAddToGlobalBasketAndReturnGlobalTotalPrice(scans);
+        totalPrice = 30 + regularOrangeJuicePrice * 8;
         totalPrice = Math.round (totalPrice * 100.0 ) / 100.0;
 
         assertEquals(totalPrice, checkout.getTotalPrice());
