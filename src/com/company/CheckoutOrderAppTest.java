@@ -14,6 +14,7 @@ public class CheckoutOrderAppTest {
     Scan cards = new Scan("cards");
     Scan groundBeef = new Scan("ground beef", 5.0);
     Scan bananas = new Scan("bananas", 5.0);
+    Scan batteries = new Scan("batteries");
 
     // create items []
     Item soupItem = new Item("soup", 1.89);
@@ -220,5 +221,20 @@ public class CheckoutOrderAppTest {
         specialsObj.put("batteries", batteriesSpecial);
 
         assertEquals(specialsObj.toString(), checkout.specials.toString());
+    }
+
+    @org.junit.Test
+    public void whenABuy3For5DollarSpecialIsCreatedShouldCorrectlyUpdateTotalPrice(){
+        Double totalPrice = 0.0;
+        Double regularCardPrice = checkout.itemList.get("batteries");
+        Double discountPrice = 5.0;
+
+        Scan[] scans = {batteries, batteries, batteries, batteries, batteries};
+
+        checkout.scanItemsAddToGlobalBasketAndReturnGlobalTotalPrice(scans);
+        totalPrice = regularCardPrice * 2 + (1 * discountPrice);
+        totalPrice = Math.round (totalPrice * 100.0 ) / 100.0;
+
+        assertEquals(totalPrice, checkout.getTotalPrice());
     }
 }

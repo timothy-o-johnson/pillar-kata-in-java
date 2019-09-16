@@ -115,6 +115,8 @@ public class CheckoutOrderApp {
 //                regularPriceQuantity = nForXObj.get("regularPriceQuantity");
 
                 break;
+            case "nForX": // "Buy N items for X dollars"
+                applySpecialsObj = calculateNForXSpecials(basketQuantity, special);
             default:
                 break;
         }
@@ -141,6 +143,29 @@ public class CheckoutOrderApp {
 
         xOffSpecialsObj.put("discountedPrice", (1 - discount) * regularPrice);
         xOffSpecialsObj.put("discountedQuantity", discountedQuantity );
+        xOffSpecialsObj.put("regularPriceQuantity", basketQuantity - discountedQuantity);
+
+        return xOffSpecialsObj;
+    }
+
+    private HashMap<String, Double> calculateNForXSpecials(Double basketQuantity, Special special) {
+        HashMap<String, Double> xOffSpecialsObj = new HashMap<>();
+
+        Double basketQuantityTemp = basketQuantity;
+        Double buyQuantity = special.buyQuantity;
+        Double discount = special.salesPrice;
+        Double limit = special.limit;
+        Double discountedQuantity = 0.0;
+
+        while (basketQuantityTemp >= buyQuantity) {
+            discountedQuantity += buyQuantity;
+            basketQuantityTemp -= buyQuantity;
+
+            if (discountedQuantity == limit) break;
+        }
+
+        xOffSpecialsObj.put("discountedPrice", discount);
+        xOffSpecialsObj.put("discountedQuantity", Math.floor(discountedQuantity / buyQuantity) );
         xOffSpecialsObj.put("regularPriceQuantity", basketQuantity - discountedQuantity);
 
         return xOffSpecialsObj;
