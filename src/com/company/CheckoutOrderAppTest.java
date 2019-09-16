@@ -16,13 +16,14 @@ public class CheckoutOrderAppTest {
     Scan bananas = new Scan("bananas", 5.0);
     Scan batteries = new Scan("batteries");
     Scan orangeJuice = new Scan("orange juice");
+    Scan lightBulbs = new Scan("light bulbs");
 
     // create items []
     Item soupItem = new Item("soup", 1.89);
     Item sardinesItem = new Item("sardines", 0.89);
     Item cardsItem = new Item("cards", 4.0);
     Item batteriesItem = new Item("batteries", 10.0);
-    Item lightbulbsItem = new Item("lightbulbs", 2.);
+    Item lightbulbsItem = new Item("light bulbs", 2.);
     Item orangeJuiceItem = new Item("orange juice", 5.);
     Item groundBeefItem = new Item("ground beef", 2.5, true);
     Item bananasItem = new Item("bananas", 1.00, true);
@@ -34,7 +35,7 @@ public class CheckoutOrderAppTest {
     // create specials
     Special sardinesSpecial = new Special("xOff", "sardines", 1.0, 1.0, 1.0, 1.0);
     Special cardsSpecial = new Special("xOff", "cards", 2.0, 1.0, 0.5, 2.0);
-
+    Special lightBulbsSpecial = new Special("xOff", "light bulbs", 2.0, 1.0, 1.0, 6.0);
 
     Special batteriesSpecial = new Special ("nForX","batteries",  3.0,  5.0, 1000.0 );
     Special orangeJuiceSpecial = new Special ("nForX","orange juice",  4.0,  10.0, 12.0 );
@@ -57,7 +58,7 @@ public class CheckoutOrderAppTest {
         checkout.addMarkdowns(markdowns);
 
         // add specials
-        Special[] specials = {sardinesSpecial, cardsSpecial, batteriesSpecial, orangeJuiceSpecial};
+        Special[] specials = {sardinesSpecial, cardsSpecial, batteriesSpecial, orangeJuiceSpecial, lightBulbsSpecial};
         checkout.addSpecials(specials);
     }
 
@@ -70,7 +71,7 @@ public class CheckoutOrderAppTest {
         itemList.put("sardines", 0.89);
         itemList.put("cards", 4.0);
         itemList.put("batteries", 10.0);
-        itemList.put("lightbulbs", 2.0);
+        itemList.put("light bulbs", 2.0);
         itemList.put("orange juice", 5.0);
         itemList.put("ground beef", 2.5);
         itemList.put("bananas", 1.00);
@@ -185,6 +186,7 @@ public class CheckoutOrderAppTest {
         specialsObj.put("cards", cardsSpecial);
         specialsObj.put("batteries", batteriesSpecial);
         specialsObj.put("orange juice", orangeJuiceSpecial);
+        specialsObj.put("light bulbs", lightBulbsSpecial);
 
         assertEquals(specialsObj.toString(), checkout.specials.toString());
     }
@@ -224,6 +226,7 @@ public class CheckoutOrderAppTest {
         specialsObj.put("cards", cardsSpecial);
         specialsObj.put("batteries", batteriesSpecial);
         specialsObj.put("orange juice", orangeJuiceSpecial);
+        specialsObj.put("light bulbs", lightBulbsSpecial);
 
         assertEquals(specialsObj.toString(), checkout.specials.toString());
     }
@@ -258,6 +261,25 @@ public class CheckoutOrderAppTest {
 
         checkout.scanItemsAddToGlobalBasketAndReturnGlobalTotalPrice(scans);
         totalPrice = 30 + regularOrangeJuicePrice * 8;
+        totalPrice = Math.round (totalPrice * 100.0 ) / 100.0;
+
+        assertEquals(totalPrice, checkout.getTotalPrice());
+    }
+
+    @org.junit.Test
+    public void whenAddingBuy2Get1Limit6SpecialShouldUpdateTotalPrice(){
+        Double totalPrice = 0.0;
+        Double regularLightBulbsPrice = checkout.itemList.get("light bulbs");
+
+        Scan[] scans = new Scan[20];
+
+        for(int i = 0; i < 20; i++ ){
+            scans[i] = lightBulbs;
+        }
+
+
+        checkout.scanItemsAddToGlobalBasketAndReturnGlobalTotalPrice(scans);
+        totalPrice = regularLightBulbsPrice * (12 + 2);
         totalPrice = Math.round (totalPrice * 100.0 ) / 100.0;
 
         assertEquals(totalPrice, checkout.getTotalPrice());
