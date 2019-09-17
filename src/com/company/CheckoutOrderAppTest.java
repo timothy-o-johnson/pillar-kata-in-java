@@ -308,4 +308,28 @@ public class CheckoutOrderAppTest {
 
         assertEquals(totalPrice, checkout.removeScannedItemsReturnTotalPrice(scansForRemoval));
     }
+
+    @org.junit.Test
+    public void whenRemovingAScannedItemAndInvalidatingAnXOffSpecialShouldUpdateTotalPrice(){
+        Double totalPriceWithOutSpecial = 0.0;
+        Double regularLightBulbsPrice = checkout.itemList.get("light bulbs");
+
+        Scan[] scans = new Scan[20];
+        Scan[] scansForRemoval = new Scan[13];
+
+        for(int i = 0; i < 20; i++ ){
+            scans[i] = lightBulbs;
+        }
+
+        checkout.scanItemsAddToGlobalBasketAndReturnGlobalTotalPrice(scans);
+
+        for(int i = 0; i < 13; i++ ){
+            scansForRemoval[i] = lightBulbs;
+        }
+
+        totalPriceWithOutSpecial = 4 * regularLightBulbsPrice + 2 * 0 + 1 * regularLightBulbsPrice;
+        totalPriceWithOutSpecial = Math.round (totalPriceWithOutSpecial * 100.0 ) / 100.0;
+
+        assertEquals(totalPriceWithOutSpecial, checkout.removeScannedItemsReturnTotalPrice(scansForRemoval));
+    }
 }
