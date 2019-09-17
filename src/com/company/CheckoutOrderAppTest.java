@@ -284,4 +284,28 @@ public class CheckoutOrderAppTest {
 
         assertEquals(totalPrice, checkout.getTotalPrice());
     }
+
+    @org.junit.Test
+    public void whenRemovingAScannedItemAndInvalidatingAnXForNSpecialShouldUpdateTotalPrice(){
+        Double totalPrice = 0.0;
+        Double regularOrangeJuicePrice = checkout.itemList.get("orange juice");
+
+        Scan[] scans = new Scan[20];
+        Scan[] scansForRemoval = new Scan[10];
+
+        for(int i = 0; i < 20; i++ ){
+            scans[i] = orangeJuice;
+        }
+
+        checkout.scanItemsAddToGlobalBasketAndReturnGlobalTotalPrice(scans);
+
+        for(int i = 0; i < 10; i++ ){
+            scansForRemoval[i] = orangeJuice;
+        }
+
+        totalPrice = regularOrangeJuicePrice * 2 + 20;
+        totalPrice = Math.round (totalPrice * 100.0 ) / 100.0;
+
+        assertEquals(totalPrice, checkout.removeScannedItemsReturnTotalPrice(scansForRemoval));
+    }
 }

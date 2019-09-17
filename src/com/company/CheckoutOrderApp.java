@@ -155,7 +155,7 @@ public class CheckoutOrderApp {
         Double buyQuantity = special.buyQuantity;
         double discount = special.salesPrice;
         double limit = special.limit;
-        Double discountedQuantity = 0.0;
+        double discountedQuantity = 0.0;
 
         while (basketQuantityTemp >= buyQuantity) {
             discountedQuantity += buyQuantity;
@@ -169,5 +169,20 @@ public class CheckoutOrderApp {
         xOffSpecialsObj.put("regularPriceQuantity", basketQuantity - discountedQuantity);
 
         return xOffSpecialsObj;
+    }
+
+    public  Double removeScannedItemsReturnTotalPrice(Scan[] scans){
+        double newQuantity;
+
+        for(Scan scan: scans){
+            if(this.basket.containsKey(scan.name)){
+                if(this.basket.get(scan.name) > 0){
+                    newQuantity = this.basket.get(scan.name) - 1 ;
+                    this.basket.replace(scan.name, newQuantity);
+                }
+            }
+
+        }
+        return getTotalPrice();
     }
 }
