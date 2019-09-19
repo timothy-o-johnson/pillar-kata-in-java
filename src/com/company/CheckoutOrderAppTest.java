@@ -7,12 +7,13 @@ import static org.junit.Assert.*;
 public class CheckoutOrderAppTest {
 
     CheckoutOrderApp checkout;
+    Double totalPrice;
 
     // scans
     Scan soup = new Scan("soup");
     Scan sardines = new Scan("sardines");
     Scan cards = new Scan("cards");
-    Scan groundBeef = new Scan("ground beef", 5.0);
+    Scan groundBeef = new Scan("ground beef", 4.0);
     Scan bananas = new Scan("bananas", 5.0);
     Scan batteries = new Scan("batteries");
     Scan orangeJuice = new Scan("orange juice");
@@ -48,6 +49,7 @@ public class CheckoutOrderAppTest {
     @org.junit.Before
     public void setup(){
         checkout = new CheckoutOrderApp();
+        totalPrice = 0.0;
 
         // add items to itemList
         Item[] items = {soupItem, sardinesItem, cardsItem, batteriesItem, lightbulbsItem, orangeJuiceItem, groundBeefItem, bananasItem};
@@ -122,7 +124,7 @@ public class CheckoutOrderAppTest {
         basket.put("soup", 2.0);
         basket.put("sardines", 1.0);
         basket.put("cards", 1.0);
-        basket.put("ground beef", 5.0);
+        basket.put("ground beef", 4.0);
 
         checkout.scanItemsAddToGlobalBasketAndReturnGlobalTotalPrice(scans);
 
@@ -140,7 +142,7 @@ public class CheckoutOrderAppTest {
         totalPrice += (checkout.itemList.get("soup") - checkout.markdowns.get("soup"))* 2;
         totalPrice += checkout.itemList.get("sardines") * 1;
         totalPrice += checkout.itemList.get("cards") * 1;
-        totalPrice += checkout.itemList.get("ground beef") * 5;
+        totalPrice += checkout.itemList.get("ground beef") * 4;
 
         checkout.scanItemsAddToGlobalBasketAndReturnGlobalTotalPrice(scans);
 
@@ -331,5 +333,21 @@ public class CheckoutOrderAppTest {
         totalPriceWithOutSpecial = Math.round (totalPriceWithOutSpecial * 100.0 ) / 100.0;
 
         assertEquals(totalPriceWithOutSpecial, checkout.removeScannedItemsReturnTotalPrice(scansForRemoval));
+    }
+
+    @org.junit.Test
+    public void whenAddingABuyNGetMOfEqualOrLesserValueForXOffShouldAddToSpecialsObject(){
+        Special groundBeefSpecial = new Special ("equalOrLesser","ground beef",  2.0, 1.0, 0.5, null );
+        Special[] specials = {groundBeefSpecial};
+        Scan[] scans = {groundBeef};
+
+        checkout.addSpecials(specials);
+
+        // special price = 2 @ reg price + 1 @ 1/2 price + 1 @ reg price
+        totalPrice = 2 * groundBeefItem.price + 1 * groundBeefItem.price/2 + 1 * groundBeefItem.price;
+        totalPrice = Math.round (totalPrice * 100.0 ) / 100.0;
+
+        assertEquals(totalPrice, checkout.scanItemsAddToGlobalBasketAndReturnGlobalTotalPrice(scans));
+
     }
 }

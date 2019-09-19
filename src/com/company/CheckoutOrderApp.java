@@ -108,6 +108,7 @@ public class CheckoutOrderApp {
         HashMap<String, Double> applySpecialsObj = new HashMap<>();
 
         switch (specialType) {
+            case "equalOrLesser":
             case "xOff": //"Buy N items, get M at X% off"
                 applySpecialsObj = calculateNForXOffSpecials(basketQuantity, special, regularPrice);
 //                discountedPrice = nForXObj.get("discountedPrice");
