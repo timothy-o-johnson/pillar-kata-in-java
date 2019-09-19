@@ -41,6 +41,12 @@ public class CheckoutOrderAppTest {
     Special batteriesSpecial = new Special ("nForX","batteries",  3.0,  5.0, 1000.0 );
     Special orangeJuiceSpecial = new Special ("nForX","orange juice",  4.0,  10.0, 12.0 );
 
+    private Double makeDouble(Double totalPrice){
+        
+        
+        return totalPrice;
+    }
+    
     @org.junit.BeforeClass
     public static void beforeClass(){
         System.out.println("This loads before any tests are called.");
@@ -66,7 +72,6 @@ public class CheckoutOrderAppTest {
 
     @org.junit.Test
     public void whenItemsHaveBeenEnteredShouldReturnAnObjectOfItems(){
-
         HashMap<String, Double> itemList = new HashMap();
 
         itemList.put("soup", 1.89);
@@ -133,11 +138,7 @@ public class CheckoutOrderAppTest {
 
     @org.junit.Test
     public void whenScannedTotalShouldReflectAnIncreaseByThePerUnitPrice(){
-        Double totalPrice = 0.0;
-
         Scan[] scans = {soup, sardines, soup, cards, groundBeef};
-
-        HashMap<String, Double> basket = new HashMap();
 
         totalPrice += (checkout.itemList.get("soup") - checkout.markdowns.get("soup"))* 2;
         totalPrice += checkout.itemList.get("sardines") * 1;
@@ -170,8 +171,6 @@ public class CheckoutOrderAppTest {
 
     @org.junit.Test
     public void whenScanningAByWeightItemTotalPriceShouldReflectTheByWeightCostLessTheMarkdown(){
-        Double totalPrice = 0.0;
-
         Scan[] scans = {soup, soup, bananas};
         checkout.scanItemsAddToGlobalBasketAndReturnGlobalTotalPrice(scans);
 
@@ -195,8 +194,6 @@ public class CheckoutOrderAppTest {
 
     @org.junit.Test
     public void whenABuyNItemsGetMItemsAtXPercentOffSpecialIsCreatedShouldApplySpecialToTotalPrice(){
-       Double totalPrice = 0.0;
-
        Scan[] scans = {sardines, sardines, sardines};
 
        checkout.scanItemsAddToGlobalBasketAndReturnGlobalTotalPrice(scans);
@@ -207,8 +204,7 @@ public class CheckoutOrderAppTest {
     }
 
     @org.junit.Test
-    public void whenABuy2ItemsGet1ItemAt50PercentOffSpecialIsCreatedShouldCorrectlyUpdateTotalPrice(){
-        Double totalPrice = 0.0;
+    public void whenABuy2ItemsGet1ItemAt50PercentOffSpecialIsCreatedShouldCorrectlyUpdateTotalPrice(){  
         Double regularCardPrice = checkout.itemList.get("cards");
         Double discount = 0.5;
 
@@ -216,7 +212,6 @@ public class CheckoutOrderAppTest {
 
         checkout.scanItemsAddToGlobalBasketAndReturnGlobalTotalPrice(scans);
         totalPrice = regularCardPrice * 3 + (1 * discount * regularCardPrice);
-        totalPrice = Math.round (totalPrice * 100.0 ) / 100.0;
 
         assertEquals(totalPrice, checkout.getTotalPrice());
     }
@@ -235,7 +230,6 @@ public class CheckoutOrderAppTest {
 
     @org.junit.Test
     public void whenABuy3For5DollarSpecialIsCreatedShouldCorrectlyUpdateTotalPrice(){
-        Double totalPrice = 0.0;
         Double regularCardPrice = checkout.itemList.get("batteries");
         Double discountPrice = 5.0;
 
@@ -243,15 +237,13 @@ public class CheckoutOrderAppTest {
 
         checkout.scanItemsAddToGlobalBasketAndReturnGlobalTotalPrice(scans);
         totalPrice = regularCardPrice * 2 + (1 * discountPrice);
-        totalPrice = Math.round (totalPrice * 100.0 ) / 100.0;
 
         assertEquals(totalPrice, checkout.getTotalPrice());
     }
 
 
     @org.junit.Test
-    public void whenAddingBuy4Get10Limit12SpecialShouldUpdateTotalPrice(){
-        Double totalPrice = 0.0;
+    public void whenAddingBuy4Get10Limit12SpecialShouldUpdateTotalPrice(){   
         Double regularOrangeJuicePrice = checkout.itemList.get("orange juice");
 
         Scan[] scans = new Scan[20];
@@ -260,17 +252,14 @@ public class CheckoutOrderAppTest {
             scans[i] = orangeJuice;
         }
 
-
         checkout.scanItemsAddToGlobalBasketAndReturnGlobalTotalPrice(scans);
         totalPrice = 30 + regularOrangeJuicePrice * 8;
-        totalPrice = Math.round (totalPrice * 100.0 ) / 100.0;
 
         assertEquals(totalPrice, checkout.getTotalPrice());
     }
 
     @org.junit.Test
     public void whenAddingBuy2Get1Limit6SpecialShouldUpdateTotalPrice(){
-        Double totalPrice = 0.0;
         Double regularLightBulbsPrice = checkout.itemList.get("light bulbs");
 
         Scan[] scans = new Scan[20];
@@ -282,14 +271,13 @@ public class CheckoutOrderAppTest {
 
         checkout.scanItemsAddToGlobalBasketAndReturnGlobalTotalPrice(scans);
         totalPrice = regularLightBulbsPrice * (12 + 2);
-        totalPrice = Math.round (totalPrice * 100.0 ) / 100.0;
+        
 
         assertEquals(totalPrice, checkout.getTotalPrice());
     }
 
     @org.junit.Test
     public void whenRemovingAScannedItemAndInvalidatingAnXForNSpecialShouldUpdateTotalPrice(){
-        Double totalPrice = 0.0;
         Double regularOrangeJuicePrice = checkout.itemList.get("orange juice");
 
         Scan[] scans = new Scan[20];
@@ -306,7 +294,6 @@ public class CheckoutOrderAppTest {
         }
 
         totalPrice = regularOrangeJuicePrice * 2 + 20;
-        totalPrice = Math.round (totalPrice * 100.0 ) / 100.0;
 
         assertEquals(totalPrice, checkout.removeScannedItemsReturnTotalPrice(scansForRemoval));
     }
@@ -345,9 +332,7 @@ public class CheckoutOrderAppTest {
 
         // special price = 2 @ reg price + 1 @ 1/2 price + 1 @ reg price
         totalPrice = 2 * groundBeefItem.price + 1 * groundBeefItem.price/2 + 1 * groundBeefItem.price;
-        totalPrice = Math.round (totalPrice * 100.0 ) / 100.0;
 
         assertEquals(totalPrice, checkout.scanItemsAddToGlobalBasketAndReturnGlobalTotalPrice(scans));
-
     }
 }

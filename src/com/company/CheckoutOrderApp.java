@@ -111,10 +111,6 @@ public class CheckoutOrderApp {
             case "equalOrLesser":
             case "xOff": //"Buy N items, get M at X% off"
                 applySpecialsObj = calculateNForXOffSpecials(basketQuantity, special, regularPrice);
-//                discountedPrice = nForXObj.get("discountedPrice");
-//                discountedQuantity = nForXObj.get("discountedQuantity");
-//                regularPriceQuantity = nForXObj.get("regularPriceQuantity");
-
                 break;
             case "nForX": // "Buy N items for X dollars"
                 applySpecialsObj = calculateNForXSpecials(basketQuantity, special);
